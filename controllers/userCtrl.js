@@ -165,7 +165,7 @@ const userCtrl = {
         },
         { new: true }
       )
-      res.json(updatedUser)
+      res.json({ msg: 'User reported' })
     } catch (err) {
       return res.status(500).json({ msg: err.message })
     }

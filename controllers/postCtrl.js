@@ -79,6 +79,7 @@ const postCtrl = {
       const features = new APIfeatures(
         Posts.find({
           user: [...req.user.following, req.user._id],
+          banned: false,
         }),
         req.query
       ).paginating()
@@ -177,8 +178,12 @@ const postCtrl = {
   },
   getUserPosts: async (req, res) => {
     try {
+      const filter = { user: req.params.id, banned: false }
+      if (req.user._id == req.params.id) {
+        delete filter.banned
+      }
       const features = new APIfeatures(
-        Posts.find({ user: req.params.id }),
+        Posts.find(filter),
         req.query
       ).paginating()
       const posts = await features.query.sort('-createdAt')
@@ -194,11 +199,12 @@ const postCtrl = {
   getPost: async (req, res) => {
     try {
       const post = await Posts.findById(req.params.id)
+        .populate('reports')
         .populate('user likes', 'avatar username fullname followers')
         .populate({
           path: 'comments',
           populate: {
-            path: 'user likes reports',
+            path: 'user likes',
             select: '-password',
           },
         })
@@ -324,7 +330,7 @@ const postCtrl = {
         },
         { new: true }
       )
-      res.json(updatedPost)
+      res.json({ msg: 'Post reported' })
     } catch (err) {
       return res.status(500).json({ msg: err.message })
     }
