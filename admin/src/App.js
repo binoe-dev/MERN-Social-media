@@ -1,12 +1,13 @@
-import { Admin, Resource, ListGuesser, fetchUtils } from 'react-admin'
+import { Admin, Resource, ShowGuesser, fetchUtils } from 'react-admin'
 import restProvider from 'ra-data-simple-rest'
-import axios from 'axios'
+import { UserList, UserShow } from './Users'
+import { PostList, PostShow } from './Posts'
 
 const serverURL = process.env.REACT_APP_SERVER_URL || 'http://localhost:5000'
 
 const authProvider = {
   login: ({ username, password }) => {
-    const request = new Request(`${serverURL}/api/login`, {
+    const request = new Request(`${serverURL}/api/adminLogin`, {
       method: 'POST',
       body: JSON.stringify({ email: username, password }),
       headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -54,7 +55,8 @@ const dataProvider = restProvider(`${serverURL}/api`, httpClient)
 function App() {
   return (
     <Admin authProvider={authProvider} dataProvider={dataProvider}>
-      <Resource name="user" list={ListGuesser} />
+      <Resource name="user" list={UserList} show={UserShow} />
+      <Resource name="post" list={PostList} show={PostShow} />
     </Admin>
   )
 }

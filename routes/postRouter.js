@@ -29,4 +29,8 @@ router.get('/getSavePosts', auth, postCtrl.getSavePosts)
 
 router.post('/post/:id/report', auth, postCtrl.reportPost)
 
+router.get('/post', auth, postCtrl.getAllPosts)
+
+router.put('/post/:id', auth, postCtrl.toggleBanPost)
+
 module.exports = router

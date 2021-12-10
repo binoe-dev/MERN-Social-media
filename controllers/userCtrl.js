@@ -32,10 +32,10 @@ const userCtrl = {
     try {
       const user = await Users.findById(req.params.id)
         .select('-password')
-        .populate('followers following', '-password')
+        .populate('followers following reports', '-password')
       if (!user) return res.status(400).json({ msg: 'User does not exist.' })
 
-      res.json({ user })
+      res.json({ user, id: user._id })
     } catch (err) {
       return res.status(500).json({ msg: err.message })
     }
@@ -155,7 +155,8 @@ const userCtrl = {
   },
   reportUser: async (req, res) => {
     try {
-      const newReport = new Reports({ reason: req.params.reason })
+      console.log(req.body)
+      const newReport = new Reports({ reason: req.body.reason })
       newReport.save()
       const updatedUser = await Users.findOneAndUpdate(
         { _id: req.params.id },
@@ -163,11 +164,26 @@ const userCtrl = {
           $push: { reports: newReport._id },
         },
         { new: true }
-      ).populate('report', '-password')
-      res.json(updatedUser)
+      )
+      res.json({ msg: 'User reported' })
     } catch (err) {
       return res.status(500).json({ msg: err.message })
     }
+  },
+  toggleBanUser: async (req, res) => {
+    const findUser = await Users.findOne(
+      { _id: req.params.id },
+      function (err, user) {
+        user.banned = !user.banned
+        user.save(function (err, updatedUser) {
+          if (err) {
+            res.status(500).json({ msg: err.message })
+          } else {
+            res.json(updatedUser)
+          }
+        })
+      }
+    )
   },
 }
 

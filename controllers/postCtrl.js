@@ -1,6 +1,7 @@
 const Posts = require('../models/postModel')
 const Comments = require('../models/commentModel')
 const Users = require('../models/userModel')
+const Reports = require('../models/reportModel')
 
 class APIfeatures {
   constructor(query, queryString) {
@@ -18,6 +19,12 @@ class APIfeatures {
 }
 
 const postCtrl = {
+  getAllPosts: async (req, res) => {
+    const posts = await Posts.find({})
+    res.setHeader('Access-Control-Expose-Headers', 'Content-Range')
+    res.setHeader('Content-Range', `post 0-${posts.length - 1}/${posts.length}`)
+    res.json(posts.map((post) => ({ ...post, id: post._id })))
+  },
   getReportedPosts: async (req, res) => {
     try {
       const features = new APIfeatures(Posts.find({}), req.query).paginating()
@@ -72,6 +79,7 @@ const postCtrl = {
       const features = new APIfeatures(
         Posts.find({
           user: [...req.user.following, req.user._id],
+          banned: false,
         }),
         req.query
       ).paginating()
@@ -170,8 +178,12 @@ const postCtrl = {
   },
   getUserPosts: async (req, res) => {
     try {
+      const filter = { user: req.params.id, banned: false }
+      if (req.user._id == req.params.id) {
+        delete filter.banned
+      }
       const features = new APIfeatures(
-        Posts.find({ user: req.params.id }),
+        Posts.find(filter),
         req.query
       ).paginating()
       const posts = await features.query.sort('-createdAt')
@@ -187,6 +199,7 @@ const postCtrl = {
   getPost: async (req, res) => {
     try {
       const post = await Posts.findById(req.params.id)
+        .populate('reports')
         .populate('user likes', 'avatar username fullname followers')
         .populate({
           path: 'comments',
@@ -201,6 +214,7 @@ const postCtrl = {
 
       res.json({
         post,
+        id: post._id,
       })
     } catch (err) {
       return res.status(500).json({ msg: err.message })
@@ -307,18 +321,34 @@ const postCtrl = {
   },
   reportPost: async (req, res) => {
     try {
-      const newReport = new Reports({ reason: req.params.reason })
+      const newReport = new Reports({ reason: req.body.reason })
+      newReport.save()
       const updatedPost = await Posts.findOneAndUpdate(
         { _id: req.params.id },
         {
           $push: { reports: newReport._id },
         },
         { new: true }
-      ).populate('reports')
-      res.json(updatedPost)
+      )
+      res.json({ msg: 'Post reported' })
     } catch (err) {
       return res.status(500).json({ msg: err.message })
     }
+  },
+  toggleBanPost: async (req, res) => {
+    const findPost = await Posts.findOne(
+      { _id: req.params.id },
+      function (err, post) {
+        post.banned = !post.banned
+        post.save(function (err, updatedPost) {
+          if (err) {
+            res.status(500).json({ msg: err.message })
+          } else {
+            res.json(updatedPost)
+          }
+        })
+      }
+    )
   },
 }
 
