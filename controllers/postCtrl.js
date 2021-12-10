@@ -1,6 +1,7 @@
 const Posts = require('../models/postModel')
 const Comments = require('../models/commentModel')
 const Users = require('../models/userModel')
+const Reports = require('../models/reportModel')
 
 class APIfeatures {
   constructor(query, queryString) {
@@ -307,14 +308,15 @@ const postCtrl = {
   },
   reportPost: async (req, res) => {
     try {
-      const newReport = new Reports({ reason: req.params.reason })
+      const newReport = new Reports({ reason: req.body.reason })
+      newReport.save()
       const updatedPost = await Posts.findOneAndUpdate(
         { _id: req.params.id },
         {
           $push: { reports: newReport._id },
         },
         { new: true }
-      ).populate('reports')
+      )
       res.json(updatedPost)
     } catch (err) {
       return res.status(500).json({ msg: err.message })

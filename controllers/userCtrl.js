@@ -155,7 +155,8 @@ const userCtrl = {
   },
   reportUser: async (req, res) => {
     try {
-      const newReport = new Reports({ reason: req.params.reason })
+      console.log(req.body)
+      const newReport = new Reports({ reason: req.body.reason })
       newReport.save()
       const updatedUser = await Users.findOneAndUpdate(
         { _id: req.params.id },
@@ -163,7 +164,7 @@ const userCtrl = {
           $push: { reports: newReport._id },
         },
         { new: true }
-      ).populate('report', '-password')
+      )
       res.json(updatedUser)
     } catch (err) {
       return res.status(500).json({ msg: err.message })

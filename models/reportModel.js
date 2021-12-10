@@ -2,7 +2,11 @@ const mongoose = require('mongoose')
 
 const reportSchema = new mongoose.Schema(
   {
-    reason: String,
+    reason: {
+      type: String,
+      required: true,
+      trim: true,
+    },
   },
   {
     timestamps: true,
