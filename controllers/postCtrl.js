@@ -19,6 +19,12 @@ class APIfeatures {
 }
 
 const postCtrl = {
+  getAllPosts: async (req, res) => {
+    const posts = await Posts.find({})
+    res.setHeader('Access-Control-Expose-Headers', 'Content-Range')
+    res.setHeader('Content-Range', `post 0-${posts.length - 1}/${posts.length}`)
+    res.json(posts.map((post) => ({ ...post, id: post._id })))
+  },
   getReportedPosts: async (req, res) => {
     try {
       const features = new APIfeatures(Posts.find({}), req.query).paginating()
@@ -321,6 +327,21 @@ const postCtrl = {
     } catch (err) {
       return res.status(500).json({ msg: err.message })
     }
+  },
+  toggleBanPost: async (req, res) => {
+    const findPost = await Posts.findOne(
+      { _id: req.params.id },
+      function (err, post) {
+        post.banned = !post.banned
+        post.save(function (err, updatedPost) {
+          if (err) {
+            res.status(500).json({ msg: err.message })
+          } else {
+            res.json(updatedPost)
+          }
+        })
+      }
+    )
   },
 }
 

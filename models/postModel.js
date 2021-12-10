@@ -11,6 +11,7 @@ const postSchema = new mongoose.Schema(
     comments: [{ type: mongoose.Types.ObjectId, ref: 'comment' }],
     user: { type: mongoose.Types.ObjectId, ref: 'user' },
     reports: { type: mongoose.Types.ObjectId, ref: 'report' },
+    banned: { type: Boolean, default: false },
   },
   {
     timestamps: true,

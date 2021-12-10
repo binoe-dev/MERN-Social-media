@@ -35,7 +35,7 @@ const userCtrl = {
         .populate('followers following', '-password')
       if (!user) return res.status(400).json({ msg: 'User does not exist.' })
 
-      res.json({ user })
+      res.json({ user, id: user._id })
     } catch (err) {
       return res.status(500).json({ msg: err.message })
     }
@@ -169,6 +169,21 @@ const userCtrl = {
     } catch (err) {
       return res.status(500).json({ msg: err.message })
     }
+  },
+  toggleBanUser: async (req, res) => {
+    const findUser = await Users.findOne(
+      { _id: req.params.id },
+      function (err, user) {
+        user.banned = !user.banned
+        user.save(function (err, updatedUser) {
+          if (err) {
+            res.status(500).json({ msg: err.message })
+          } else {
+            res.json(updatedUser)
+          }
+        })
+      }
+    )
   },
 }
 

@@ -44,6 +44,7 @@ const userSchema = new mongoose.Schema(
     following: [{ type: mongoose.Types.ObjectId, ref: 'user' }],
     saved: [{ type: mongoose.Types.ObjectId, ref: 'user' }],
     reports: [{ type: mongoose.Types.ObjectId, ref: 'report' }],
+    banned: { type: Boolean, default: false },
   },
   {
     timestamps: true,
