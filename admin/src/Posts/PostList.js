@@ -28,7 +28,7 @@ export const PostList = (props) => (
     perPage={100}
     bulkActionButtons={<CustomBulkActions />}
   >
-    <Datagrid rowClick="edit">
+    <Datagrid rowClick="show">
       <TextField source="id" />
       <TextField source="_doc.user" />
       <TextField source="_doc.createdAt" />

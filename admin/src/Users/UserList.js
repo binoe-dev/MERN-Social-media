@@ -28,7 +28,7 @@ export const UserList = (props) => (
     perPage={100}
     bulkActionButtons={<CustomBulkActions />}
   >
-    <Datagrid rowClick="edit">
+    <Datagrid rowClick="show">
       <TextField source="id" />
       <TextField source="_doc.email" />
       <TextField source="_doc.fullname" />

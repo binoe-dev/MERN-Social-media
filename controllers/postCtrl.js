@@ -198,7 +198,7 @@ const postCtrl = {
         .populate({
           path: 'comments',
           populate: {
-            path: 'user likes',
+            path: 'user likes reports',
             select: '-password',
           },
         })
@@ -208,6 +208,7 @@ const postCtrl = {
 
       res.json({
         post,
+        id: post._id,
       })
     } catch (err) {
       return res.status(500).json({ msg: err.message })

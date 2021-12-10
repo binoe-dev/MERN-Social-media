@@ -1,7 +1,7 @@
 import { Admin, Resource, ShowGuesser, fetchUtils } from 'react-admin'
 import restProvider from 'ra-data-simple-rest'
-import { UserList } from './Users'
-import { PostList } from './Posts'
+import { UserList, UserShow } from './Users'
+import { PostList, PostShow } from './Posts'
 
 const serverURL = process.env.REACT_APP_SERVER_URL || 'http://localhost:5000'
 
@@ -55,8 +55,8 @@ const dataProvider = restProvider(`${serverURL}/api`, httpClient)
 function App() {
   return (
     <Admin authProvider={authProvider} dataProvider={dataProvider}>
-      <Resource name="user" list={UserList} show={ShowGuesser} />
-      <Resource name="post" list={PostList} show={ShowGuesser} />
+      <Resource name="user" list={UserList} show={UserShow} />
+      <Resource name="post" list={PostList} show={PostShow} />
     </Admin>
   )
 }

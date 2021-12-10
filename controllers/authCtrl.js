@@ -65,6 +65,10 @@ const authCtrl = {
 
       if (!user)
         return res.status(400).json({ msg: 'This email does not exist.' })
+      if (user.banned)
+        return res
+          .status(406)
+          .json({ msg: 'You have been banned from this website' })
 
       const isMatch = await bcrypt.compare(password, user.password)
       if (!isMatch)
