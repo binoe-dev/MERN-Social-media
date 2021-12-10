@@ -98,12 +98,34 @@ const CallModal = () => {
 
     const playStream = (tag, stream) => {
         let video = tag;
+ 
         video.srcObject = stream;
-        video.play()
+        console.log(video.srcObject);
+
+
+        var playPromise = video.play();
+
+        if (playPromise !== undefined) {
+          playPromise.then(_ => {
+            // Automatic playback started!
+            // Show playing UI.
+          })
+          .catch(error => {
+            // Auto-play was prevented
+            // Show paused UI.
+          });
+        }
+
+        // var isPlaying = video.currentTime > 0 && !video.paused && !video.ended 
+        // && video.readyState > video.HAVE_CURRENT_DATA;
+        // if (!isPlaying) {
+        //     video.play()
+        //   }
+
     }
 
     // Answer Call
-    const handleAnswer = () => {
+    const handleAnswer = async () => {
         openStream(call.video).then(stream => {
             playStream(youVideo.current, stream)
             const track = stream.getTracks()

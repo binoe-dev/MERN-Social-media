@@ -7,13 +7,13 @@ const Header = () => {
 
     return (
         <div className="header ">
-            <nav className="navbar navbar-expand-lg navbar-light 
-            bg-light justify-content-between align-middle">
+            <nav className="navbar navbar-expand-lg justify-content-sm-between navbar-light 
+            bg-light  align-middle">
 
                 <Link to="/" className="logo">
                     <h1 className="navbar-brand"
                     onClick={() => window.scrollTo({top: 0})}>
-                        Social
+                        𝓢𝓸𝓬𝓲𝓪𝓵
                     </h1>
                 </Link>
 

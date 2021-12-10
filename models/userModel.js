@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema(
     followers: [{ type: mongoose.Types.ObjectId, ref: 'user' }],
     following: [{ type: mongoose.Types.ObjectId, ref: 'user' }],
     saved: [{ type: mongoose.Types.ObjectId, ref: 'user' }],
-    reports: [{ type: mongoose.Types.ObjectId, ref: 'reports' }],
+    reports: [{ type: mongoose.Types.ObjectId, ref: 'report' }],
   },
   {
     timestamps: true,

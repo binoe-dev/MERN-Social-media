@@ -21,14 +21,21 @@
 }
 
 .header .navbar-brand {
-    font-style: italic;
-    font-size: 25px;
+   
+    font-weight: bolder;
+    font-size: 22px;
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     
     
 }
 
 /* ----------- Header Menu ---------- */
+
+.header .menu {
+    right: inherit;
+}
+
+
 .header .menu li{
     opacity: 0.5;
 }
