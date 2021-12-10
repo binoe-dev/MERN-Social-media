@@ -100,9 +100,7 @@ const CallModal = () => {
         let video = tag;
  
         video.srcObject = stream;
-        console.log(video.srcObject);
-
-
+        
         var playPromise = video.play();
 
         if (playPromise !== undefined) {
