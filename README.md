@@ -3,6 +3,9 @@
 
 ## Demo: 
 
+## Build production for admin
+### `npm run react-script build:prod`
+
 ## Install dependencies for server 
 ### `npm install`
 
