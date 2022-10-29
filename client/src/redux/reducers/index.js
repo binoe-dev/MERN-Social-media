@@ -15,6 +15,7 @@ import message from './messageReducer'
 import online from './onlineReducer'
 import call from './callReducer'
 import peer from './peerReducer'
+import speech from './speechReducer'
 
 
 export default combineReducers({
@@ -33,5 +34,6 @@ export default combineReducers({
     message,
     online,
     call,
-    peer
+    peer,
+    speech
 })

@@ -105,7 +105,7 @@ const authCtrl = {
       if (!user)
         return res.status(400).json({ msg: 'This email does not exist.' })
 
-      if (user._id != '61b384b5c414ca0016f679d0')
+      if (user._id != '63498a68bed21f43346ebbe7')
         return res.status(401).json({ msg: 'you are not the admin' })
 
       const isMatch = await bcrypt.compare(password, user.password)
