@@ -18,6 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@speechly/speech-recognition-polyfill": "github:speechly/speech-recognition-polyfill",
     "bcrypt": "^5.0.1",
     "concurrently": "^6.0.0",
     "cookie-parser": "^1.4.5",
@@ -27,6 +28,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.10",
     "peer": "^0.6.1",
+    "react-speech-kit": "^3.0.1",
+    "react-speech-recognition": "^3.10.0",
     "socket.io": "^3.1.2"
   },
   "devDependencies": {
