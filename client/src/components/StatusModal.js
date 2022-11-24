@@ -4,6 +4,7 @@ import { GLOBALTYPES } from '../redux/actions/globalTypes'
 import { createPost, updatePost } from '../redux/actions/postAction'
 import Icons from './Icons'
 import { imageShow, videoShow } from '../utils/mediaShow'
+import  Toxicity from './Toxicity'
 
 const StatusModal = () => {
     const { auth, theme, status, socket } = useSelector(state => state)
@@ -16,6 +17,7 @@ const StatusModal = () => {
     const videoRef = useRef()
     const refCanvas = useRef()                         //dùng trả về ob current
     const [tracks, setTracks] = useState('')
+    const [toxic, setToxic] = useState('')
 
     const handleChangeImages = e => {
         const files = [...e.target.files]
@@ -107,6 +109,12 @@ const StatusModal = () => {
         }
     },[status])
 
+    useEffect(() => {
+        if(content.length > 0){
+            setToxic(content)
+        }
+    },[content])
+
 
    
 
@@ -194,6 +202,7 @@ const StatusModal = () => {
                     </div>
 
                 </div>
+                {toxic && <Toxicity text={toxic} />}
 
                 <div className="status_footer">
                     <button className="btn btn-secondary w-100" type="submit">
