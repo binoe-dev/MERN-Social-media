@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import PostCard from '../PostCard'
-
+import { Link } from 'react-router-dom'
 import LoadIcon from '../../images/loading.gif'
 import LoadMoreBtn from '../LoadMoreBtn'
 import { getDataAPI } from '../../utils/fetchData'
@@ -29,10 +29,14 @@ const Posts = () => {
 
     return (
         <div className="posts">
+
             {
                 // render nhiều post components
                 homePosts.posts.map(post => (
-                    <PostCard key={post._id} post={post} theme={theme} />
+                    
+                        <PostCard key={post._id} post={post} theme={theme} />
+
+                    
                 ))
             }
 

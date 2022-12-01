@@ -51,12 +51,9 @@ const Info = ({ id, auth, profile, dispatch }) => {
               ) : (
                 <>
                   <FollowBtn user={user} />
-                  <button
-                    className="btn btn-outline-danger"
-                    onClick={() => setOnReport(true)}
-                  >
-                    Report
-                  </button>
+                  <br>
+                  </br>
+                  
                 </>
               )}
             </div>
@@ -67,6 +64,15 @@ const Info = ({ id, auth, profile, dispatch }) => {
               </span>
               <span className="ml-4" onClick={() => setShowFollowing(true)}>
                 {user.following.length} Following
+              </span>
+
+              <span style={{paddingLeft:'267px'}}>
+                <button
+                    className="btn btn-outline-danger"
+                    onClick={() => setOnReport(true)}
+                  >
+                    Report
+                  </button>
               </span>
             </div>
 

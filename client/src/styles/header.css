@@ -17,7 +17,7 @@
 }
 
 .header .logo{
-    
+    padding-left: 30px;
 }
 
 .header .navbar-brand {
@@ -27,6 +27,10 @@
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     
     
+}
+.navbar-expand-lg .navbar-nav .nav-link {
+    padding-right: 1.5rem;
+    padding-left: .5rem;
 }
 
 /* ----------- Header Menu ---------- */
@@ -58,7 +62,7 @@
     position: absolute;
     top: 45%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-120%, -50%);
     color: white;
     font-weight: bold;
     font-size: 10px;
