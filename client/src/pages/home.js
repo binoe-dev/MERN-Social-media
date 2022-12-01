@@ -46,7 +46,7 @@ const Home = () => {
                 
             </div>
             
-            <div className="col-md-4">
+            <div className="col-md-4" style={{width: "30%"}}>
                 <RightSideBar />
             </div>
             

@@ -21,7 +21,7 @@ const SpeechRecognitionVoice = ({setData}) => {
   const voiceStart = () => {
     setIsListening(true);
     SpeechRecognition.startListening({ continuous: true, language: 'en-US' });
-  }
+  } 
 
   const voiceEnd = () => {
     setIsListening(false);
