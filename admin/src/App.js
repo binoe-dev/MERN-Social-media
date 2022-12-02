@@ -3,7 +3,7 @@ import restProvider from 'ra-data-simple-rest'
 import { UserList, UserShow } from './Users'
 import { PostList, PostShow } from './Posts'
 
-const serverURL = process.env.REACT_APP_SERVER_URL || 'http://localhost:5000'
+const serverURL = process.env.production.REACT_APP_SERVER_URL || 'http://localhost:5000'
 
 const authProvider = {
   login: ({ username, password }) => {
