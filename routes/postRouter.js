@@ -33,4 +33,6 @@ router.get('/post', auth, postCtrl.getAllPosts)
 
 router.put('/post/:id', auth, postCtrl.toggleBanPost)
 
+router.patch("/post/:id/updateview", auth, postCtrl.updateViews);
+
 module.exports = router

@@ -1,22 +1,48 @@
-import React from 'react'
-import CardHeader from './home/post_card/CardHeader'
-import CardBody from './home/post_card/CardBody'
-import CardFooter from './home/post_card/CardFooter'
+import React, { useEffect, useState } from "react";
+import CardHeader from "./home/post_card/CardHeader";
+import CardBody from "./home/post_card/CardBody";
+import CardFooter from "./home/post_card/CardFooter";
+import Modal from "./Modal";
+import Comments from "./home/Comments";
+import InputComment from "./home/InputComment";
+import "../styles/modal.css";
+import { patchDataAPI } from "../utils/fetchData";
+import { useSelector, useDispatch } from "react-redux";
+const PostCard = ({ post, theme }) => {
+  const { auth } = useSelector((state) => state);
 
-import Comments from './home/Comments'
-import InputComment from './home/InputComment'
+  const [modal, setModal] = useState(false);
 
-const PostCard = ({post, theme}) => {
-    return (
-        <div className="card my-3"> 
-            <CardHeader post={post} />
-            <CardBody post={post} theme={theme} />
-            <CardFooter post={post} />
+  const handlePostClick = async () => {
+    setModal(true);
+    try {
+      await patchDataAPI(`post/${post._id}/updateview`, null, auth.token);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-            <Comments post={post} />
-            <InputComment post={post} />
-        </div>
-    )
-}
+  const turnOffModal = () => {
+    setModal(false);
+  };
 
-export default PostCard
+  return (
+    <div className="card my-3">
+      <CardHeader post={post} />
+      <CardBody post={post} theme={theme} onClick={handlePostClick} />
+      <CardFooter post={post} />
+      <Comments post={post} />
+      <InputComment post={post} />
+      {modal && (
+        <Modal
+          post={post}
+          images={post.images}
+          id={post._id}
+          onClick={turnOffModal}
+        />
+      )}
+    </div>
+  );
+};
+
+export default PostCard;

@@ -19,61 +19,75 @@ class APIfeatures {
 }
 
 const postCtrl = {
+  updateViews: async (req, res) => {
+    try {
+      const post = await Posts.findOneAndUpdate(
+        { _id: req.params.id },
+        { $inc: { views: 1 } }
+      );
+      const views = post.views;
+      res.json({ views });
+    } catch (error) {
+      res.status(400).json({ error: error });
+    }
+  },
   getAllPosts: async (req, res) => {
-    const posts = await Posts.find({})
-    res.setHeader('Access-Control-Expose-Headers', 'Content-Range')
-    res.setHeader('Content-Range', `post 0-${posts.length - 1}/${posts.length}`)
-    res.json(posts.map((post) => ({ ...post, id: post._id })))
+    const posts = await Posts.find({});
+    res.setHeader("Access-Control-Expose-Headers", "Content-Range");
+    res.setHeader(
+      "Content-Range",
+      `post 0-${posts.length - 1}/${posts.length}`
+    );
+    res.json(posts.map((post) => ({ ...post, id: post._id })));
   },
   getReportedPosts: async (req, res) => {
     try {
-      const features = new APIfeatures(Posts.find({}), req.query).paginating()
+      const features = new APIfeatures(Posts.find({}), req.query).paginating();
 
       const posts = await features.query
-        .sort('-createdAt')
-        .populate('user likes', 'avatar username fullname followers')
+        .sort("-createdAt")
+        .populate("user likes", "avatar username fullname followers")
         .populate({
-          path: 'comments',
+          path: "comments",
           populate: {
-            path: 'user likes',
-            select: '-password',
+            path: "user likes",
+            select: "-password",
           },
-        })
+        });
 
       res.json({
-        msg: 'Success!',
+        msg: "Success!",
         result: posts.length,
         posts,
-      })
+      });
     } catch (err) {
-      return res.status(500).json({ msg: err.message })
+      return res.status(500).json({ msg: err.message });
     }
   },
   createPost: async (req, res) => {
     try {
-      const { content, images } = req.body
+      const { content, images } = req.body;
 
-      if (images.length === 0){
-        return res.status(400).json({ msg: 'Please add your photo.' })
+      if (images.length === 0) {
+        return res.status(400).json({ msg: "Please add your photo." });
       }
-
 
       const newPost = new Posts({
         content,
         images,
         user: req.user._id,
-      })
-      await newPost.save()
+      });
+      await newPost.save();
 
       res.json({
-        msg: 'Created Post!',
+        msg: "Created Post!",
         newPost: {
           ...newPost._doc,
           user: req.user,
         },
-      })
+      });
     } catch (err) {
-      return res.status(500).json({ msg: err.message })
+      return res.status(500).json({ msg: err.message });
     }
   },
   getPosts: async (req, res) => {
@@ -84,31 +98,31 @@ const postCtrl = {
           banned: false,
         }),
         req.query
-      ).paginating()
+      ).paginating();
 
       const posts = await features.query
-        .sort('-createdAt')
-        .populate('user likes', 'avatar username fullname followers')
+        .sort("-createdAt")
+        .populate("user likes", "avatar username fullname followers")
         .populate({
-          path: 'comments',
+          path: "comments",
           populate: {
-            path: 'user likes',
-            select: '-password',
+            path: "user likes",
+            select: "-password",
           },
-        })
+        });
 
       res.json({
-        msg: 'Success!',
+        msg: "Success!",
         result: posts.length,
         posts,
-      })
+      });
     } catch (err) {
-      return res.status(500).json({ msg: err.message })
+      return res.status(500).json({ msg: err.message });
     }
   },
   updatePost: async (req, res) => {
     try {
-      const { content, images } = req.body
+      const { content, images } = req.body;
 
       const post = await Posts.findOneAndUpdate(
         { _id: req.params.id },
@@ -117,32 +131,35 @@ const postCtrl = {
           images,
         }
       )
-        .populate('user likes', 'avatar username fullname')
+        .populate("user likes", "avatar username fullname")
         .populate({
-          path: 'comments',
+          path: "comments",
           populate: {
-            path: 'user likes',
-            select: '-password',
+            path: "user likes",
+            select: "-password",
           },
-        })
+        });
 
       res.json({
-        msg: 'Updated Post!',
+        msg: "Updated Post!",
         newPost: {
           ...post._doc,
           content,
           images,
         },
-      })
+      });
     } catch (err) {
-      return res.status(500).json({ msg: err.message })
+      return res.status(500).json({ msg: err.message });
     }
   },
   likePost: async (req, res) => {
     try {
-      const post = await Posts.find({ _id: req.params.id, likes: req.user._id })
+      const post = await Posts.find({
+        _id: req.params.id,
+        likes: req.user._id,
+      });
       if (post.length > 0)
-        return res.status(400).json({ msg: 'You liked this post.' })
+        return res.status(400).json({ msg: "You liked this post." });
 
       const like = await Posts.findOneAndUpdate(
         { _id: req.params.id },
@@ -150,14 +167,14 @@ const postCtrl = {
           $push: { likes: req.user._id },
         },
         { new: true }
-      )
+      );
 
       if (!like)
-        return res.status(400).json({ msg: 'This post does not exist.' })
+        return res.status(400).json({ msg: "This post does not exist." });
 
-      res.json({ msg: 'Liked Post!' })
+      res.json({ msg: "Liked Post!" });
     } catch (err) {
-      return res.status(500).json({ msg: err.message })
+      return res.status(500).json({ msg: err.message });
     }
   },
   unLikePost: async (req, res) => {
@@ -168,79 +185,79 @@ const postCtrl = {
           $pull: { likes: req.user._id },
         },
         { new: true }
-      )
+      );
 
       if (!like)
-        return res.status(400).json({ msg: 'This post does not exist.' })
+        return res.status(400).json({ msg: "This post does not exist." });
 
-      res.json({ msg: 'UnLiked Post!' })
+      res.json({ msg: "UnLiked Post!" });
     } catch (err) {
-      return res.status(500).json({ msg: err.message })
+      return res.status(500).json({ msg: err.message });
     }
   },
   getUserPosts: async (req, res) => {
     try {
-      const filter = { user: req.params.id, banned: false }
+      const filter = { user: req.params.id, banned: false };
       if (req.user._id == req.params.id) {
-        delete filter.banned
+        delete filter.banned;
       }
       const features = new APIfeatures(
         Posts.find(filter),
         req.query
-      ).paginating()
-      const posts = await features.query.sort('-createdAt')
+      ).paginating();
+      const posts = await features.query.sort("-createdAt");
 
       res.json({
         posts,
         result: posts.length,
-      })
+      });
     } catch (err) {
-      return res.status(500).json({ msg: err.message })
+      return res.status(500).json({ msg: err.message });
     }
   },
   getPost: async (req, res) => {
     try {
       const post = await Posts.findById(req.params.id)
-        .populate('reports')
-        .populate('user likes', 'avatar username fullname followers')
+        .populate("reports")
+        .populate("user likes", "avatar username fullname followers")
         .populate({
-          path: 'comments',
+          path: "comments",
           populate: {
-            path: 'user likes',
-            select: '-password',
+            path: "user likes",
+            select: "-password",
           },
-        })
+        });
 
       if (!post)
-        return res.status(400).json({ msg: 'This post does not exist.' })
+        return res.status(400).json({ msg: "This post does not exist." });
 
       res.json({
         post,
         id: post._id,
-      })
+      });
     } catch (err) {
-      return res.status(500).json({ msg: err.message })
+      return res.status(500).json({ msg: err.message });
     }
   },
   getPostsDicover: async (req, res) => {
     try {
-      const newArr = [...req.user.following, req.user._id]
+      const newArr = [...req.user.following, req.user._id];
 
-      const num = req.query.num || 9
+      const num = req.query.num || 9;
 
       const posts = await Posts.aggregate([
         { $match: { user: { $nin: newArr } } },
         { $sample: { size: Number(num) } },
-      ])
-      console.log(posts)
+      ]);
+      console.log(posts);
 
       return res.json({
-        msg: 'Success!',
+        msg: "Success!",
         result: posts.length,
         posts,
-      })
+      });
     } catch (err) {
-      return res.status(500).json({ msg: err.message })
+      return res.status(500).json({ msg: err.message });
     }
   },
   deletePost: async (req, res) => {
@@ -248,25 +265,28 @@ const postCtrl = {
       const post = await Posts.findOneAndDelete({
         _id: req.params.id,
         user: req.user._id,
-      })
-      await Comments.deleteMany({ _id: { $in: post.comments } })
+      });
+      await Comments.deleteMany({ _id: { $in: post.comments } });
 
       res.json({
-        msg: 'Deleted Post!',
+        msg: "Deleted Post!",
         newPost: {
           ...post,
           user: req.user,
         },
-      })
+      });
     } catch (err) {
-      return res.status(500).json({ msg: err.message })
+      return res.status(500).json({ msg: err.message });
     }
   },
   savePost: async (req, res) => {
     try {
-      const user = await Users.find({ _id: req.user._id, saved: req.params.id })
+      const user = await Users.find({
+        _id: req.user._id,
+        saved: req.params.id,
+      });
       if (user.length > 0)
-        return res.status(400).json({ msg: 'You saved this post.' })
+        return res.status(400).json({ msg: "You saved this post." });
 
       const save = await Users.findOneAndUpdate(
         { _id: req.user._id },
@@ -274,14 +294,14 @@ const postCtrl = {
           $push: { saved: req.params.id },
         },
         { new: true }
-      )
+      );
 
       if (!save)
-        return res.status(400).json({ msg: 'This user does not exist.' })
+        return res.status(400).json({ msg: "This user does not exist." });
 
-      res.json({ msg: 'Saved Post!' })
+      res.json({ msg: "Saved Post!" });
     } catch (err) {
-      return res.status(500).json({ msg: err.message })
+      return res.status(500).json({ msg: err.message });
     }
   },
   unSavePost: async (req, res) => {
@@ -292,14 +312,14 @@ const postCtrl = {
           $pull: { saved: req.params.id },
         },
         { new: true }
-      )
+      );
 
       if (!save)
-        return res.status(400).json({ msg: 'This user does not exist.' })
+        return res.status(400).json({ msg: "This user does not exist." });
 
-      res.json({ msg: 'unSaved Post!' })
+      res.json({ msg: "unSaved Post!" });
     } catch (err) {
-      return res.status(500).json({ msg: err.message })
+      return res.status(500).json({ msg: err.message });
     }
   },
   getSavePosts: async (req, res) => {
@@ -309,49 +329,49 @@ const postCtrl = {
           _id: { $in: req.user.saved },
         }),
         req.query
-      ).paginating()
+      ).paginating();
 
-      const savePosts = await features.query.sort('-createdAt')
+      const savePosts = await features.query.sort("-createdAt");
 
       res.json({
         savePosts,
         result: savePosts.length,
-      })
+      });
     } catch (err) {
-      return res.status(500).json({ msg: err.message })
+      return res.status(500).json({ msg: err.message });
     }
   },
   reportPost: async (req, res) => {
     try {
-      const newReport = new Reports({ reason: req.body.reason })
-      newReport.save()
+      const newReport = new Reports({ reason: req.body.reason });
+      newReport.save();
       const updatedPost = await Posts.findOneAndUpdate(
         { _id: req.params.id },
         {
           $push: { reports: newReport._id },
         },
         { new: true }
-      )
-      res.json({ msg: 'Post reported' })
+      );
+      res.json({ msg: "Post reported" });
     } catch (err) {
-      return res.status(500).json({ msg: err.message })
+      return res.status(500).json({ msg: err.message });
     }
   },
   toggleBanPost: async (req, res) => {
     const findPost = await Posts.findOne(
       { _id: req.params.id },
       function (err, post) {
-        post.banned = !post.banned
+        post.banned = !post.banned;
         post.save(function (err, updatedPost) {
           if (err) {
-            res.status(500).json({ msg: err.message })
+            res.status(500).json({ msg: err.message });
           } else {
-            res.json(updatedPost)
+            res.json(updatedPost);
           }
-        })
+        });
       }
-    )
+    );
   },
-}
+};
 
 module.exports = postCtrl

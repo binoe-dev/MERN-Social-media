@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-const Carousel = ({ images, id, onClick }) => {
+const ModalCarousel = ({ images, id, onClick }) => {
   const isActive = (index) => {
     if (index === 0) return "active";
   };
@@ -11,7 +11,7 @@ const Carousel = ({ images, id, onClick }) => {
   return (
     <div
       id={`image${id}`}
-      className="carousel slide"
+      className="carousel slide h-100"
       data-ride="carousel"
       style={{ cursor: "pointer" }}
     >
@@ -26,25 +26,29 @@ const Carousel = ({ images, id, onClick }) => {
         ))}
       </ol>
 
-      <div className="carousel-inner">
+      <div
+        className="carousel-inner h-100"
+        style={{ display: "flex", alignItems: "center" }}
+      >
         {images.map((img, index) => (
           <div
             key={index}
             className={`carousel-item ${isActive(index)}`}
+            // style={{height: "auto"}}
             onClick={onClick}
           >
             {img.url.match(/video/i) ? (
               <video
                 controls
                 src={img.url}
-                className="d-block w-100"
+                className="d-block w-100 h-100"
                 alt={img.url}
                 style={{ filter: theme ? "invert(1)" : "invert(0)" }}
               />
             ) : (
               <img
                 src={img.url}
-                className="d-block w-100"
+                className="d-block w-100 h-100"
                 alt={img.url}
                 style={{ filter: theme ? "invert(1)" : "invert(0)" }}
               />
@@ -88,4 +92,4 @@ const Carousel = ({ images, id, onClick }) => {
   );
 };
 
-export default Carousel;
+export default ModalCarousel;
