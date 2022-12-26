@@ -6,6 +6,7 @@ import {  useDispatch } from 'react-redux'
 const SpeechRecognitionVoice = ({setData}) => {
   
   const [isListening, setIsListening] = useState(false)
+  const [language, setLanguage] = useState('vi-VN')
   const { transcript, browserSupportsSpeechRecognition } = useSpeechRecognition()
   const dispatch = useDispatch()
 
@@ -20,7 +21,7 @@ const SpeechRecognitionVoice = ({setData}) => {
 
   const voiceStart = () => {
     setIsListening(true);
-    SpeechRecognition.startListening({ continuous: true, language: 'en-US' });
+    SpeechRecognition.startListening({ continuous: true, language: language }); //vi-VN
   } 
 
   const voiceEnd = () => {
@@ -42,7 +43,14 @@ const SpeechRecognitionVoice = ({setData}) => {
               isListening ? <p>Listening...</p> : <p>Click to start listening</p>
             }</h5>
           <hr/>
-          
+
+          <div className="chooseVoice" style={{paddingLeft: '110px'}}>
+            <select value={language} onChange={e => setLanguage(e.target.value)} style={{width: '50%', textAlign: 'center'}}>
+                  <option value="vi-VN">Viet Nam</option>
+                  <option value="en-US">English</option>
+            </select>
+          </div>
+          <br></br>
           <div className="voice_content">
                <button type="button" className="btn btn-link" 
                style={{backgroundColor:'#fff',
@@ -52,13 +60,14 @@ const SpeechRecognitionVoice = ({setData}) => {
                     width:'70px',
                     position: 'absolute',
                     left: '140px',
-                    top: '100px'}}
+                    top: '120px'}}
                 // onTouchStart={handleListing}
                 // // onMouseDown={handleListing}
                 // onTouchEnd={handleListing}
                 // // onMouseUp={handleListing}
                 onClick={handleListing}>
                 <span className="bi bi-mic red-color" > </span></button>
+
                 <p style={{
                     position: 'absolute',
                     maxHeight:'500px',
