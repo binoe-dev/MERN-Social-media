@@ -7,7 +7,7 @@ import { imageShow, videoShow } from '../utils/mediaShow'
 import  Toxicity from './Toxicity'
 
 const StatusModal = () => {
-    const { auth, theme, status, socket } = useSelector(state => state)
+    const { auth, theme, status, socket, toxic } = useSelector(state => state)
     const dispatch = useDispatch()
 
     const [content, setContent] = useState('')
@@ -17,7 +17,7 @@ const StatusModal = () => {
     const videoRef = useRef()
     const refCanvas = useRef()                         //dùng trả về ob current
     const [tracks, setTracks] = useState('')
-    const [toxic, setToxic] = useState('')
+    const [toxicContent, setToxic] = useState('')
 
     const handleChangeImages = e => {
         const files = [...e.target.files]
@@ -202,12 +202,13 @@ const StatusModal = () => {
                     </div>
 
                 </div>
-                {toxic && <Toxicity text={toxic} />}
+                {toxicContent && <Toxicity text={toxicContent} />}
 
                 <div className="status_footer">
+                    {!toxic ? 
                     <button className="btn btn-secondary w-100" type="submit">
                         Post
-                    </button>
+                    </button> : '' }
                 </div>
 
             </form>
