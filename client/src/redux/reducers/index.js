@@ -16,6 +16,7 @@ import online from "./onlineReducer";
 import call from "./callReducer";
 import peer from "./peerReducer";
 import speech from "./speechReducer";
+import toxic from "./toxicityReducer";
 import groupMessage from "./groupMessageReducer";
 
 export default combineReducers({
@@ -36,5 +37,6 @@ export default combineReducers({
   call,
   peer,
   speech,
+  toxic,
   groupMessage,
 });
