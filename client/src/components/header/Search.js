@@ -37,7 +37,7 @@ const Search = () => {
     const handleVoiceSearch = async (e) => {
         try {
             setLoad(true)
-            const res = await getDataAPI(`search?username=${data.toLowerCase().replace('.', '')}`, auth.token)
+            const res = await getDataAPI(`search?username=${data.replace('.', '')}`, auth.token)
             setUsers(res.data.users)
             setLoad(false)
         } catch (err) {
