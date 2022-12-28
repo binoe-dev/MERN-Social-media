@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CardHeader from "./home/post_card/CardHeader";
 import CardBody from "./home/post_card/CardBody";
 import CardFooter from "./home/post_card/CardFooter";
@@ -7,7 +7,8 @@ import Comments from "./home/Comments";
 import InputComment from "./home/InputComment";
 import "../styles/modal.css";
 import { patchDataAPI } from "../utils/fetchData";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+
 const PostCard = ({ post, theme }) => {
   const { auth } = useSelector((state) => state);
 

@@ -1,0 +1,174 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.modalCard {
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  border-radius: 10px;
+  position: fixed;
+  top: 10vh;
+  left: 35%;
+  width: 30%;
+  height: 80%;
+  z-index: 100;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.createGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.createGroup input {
+  font-size: 20px;
+  border-radius: 10px;
+  text-indent: 20px
+}
+
+.createGroup button {
+  font-size: 26px;
+  width: 50%;
+  margin: 0 auto 10px auto;
+}
+
+.createGroup button:hover {
+  background-color: #219ebc;
+}
+
+.small-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+}
+
+.resultContainer {
+  overflow-y: scroll
+}
+
+.resultContainer::-webkit-scrollbar {
+  display: none;
+  /* Safari and Chrome */
+}
+
+.searchResult {
+  border: 3px solid #aaaaaa;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
+  display: flex;
+  padding: 10px;
+  gap: 10px;
+}
+
+.badgeContainer {
+  display: flex;
+  flex-direction: row;
+  width: auto;
+  height: 50px;
+  overflow-x: scroll
+}
+
+.badgeContainer::-webkit-scrollbar {
+  display: none;
+  /* Safari and Chrome */
+}
+
+.groupBadge {
+  margin: 5px;
+  border: 3px solid #aaaaaa;
+  border-radius: 5px;
+}
+
+.badgeContent {
+  padding: 5px;
+}
+
+.groupList {
+  height: 80px;
+  padding: 15px;
+  display: flex;
+  gap: 100px;
+  border: 1px solid #f3f3f3;
+}
+
+/* Right Side Render Group Message */
+.otherGroupChatContainer {
+  margin-bottom: 35px;
+}
+
+.otherGroupChatText {
+  background-color: white;
+  color: black;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 15px 15px 15px 0;
+  width: fit-content;
+  max-width: 60%;
+}
+
+.groupDate {
+  font-size: 12px;
+  color: #777;
+  margin-top: 15px;
+}
+
+.yourGroupChatContainer {
+  float: right;
+  margin-bottom: 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+
+.yourGroupChatText {
+  background-color: #0048aa;
+  color: white;
+  padding: 10px;
+  border-radius: 15px 15px 0 15px;
+  width: fit-content;
+  width: 60%;
+}
+
+.yourGroupDate {
+  float: right;
+}
+
+.senderAvatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.senderContainer {
+  display: flex;
+}
+
+/* Right Side Render Group Header */
+.groupHeader-container{
+  width: 100%;
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+padding: 0 10px 0 20px;
+}
+
+.groupName{
+  /* font-weight: 500; */
+  color:#0048aa;
+}
+
+/* Group Chat Image */
+.groupChatImg {
+  width: 200px;
+}
