@@ -4,14 +4,14 @@ const User = require("../models/userModel");
 
 const createGroupConversation = async (req, res) => {
   const { groupConversationName, recipientsString } = req.body;
-  if (!groupConversationName || !recipientsString) {
-    return res.status(400).send({ msg: "Please Fill all the fields" });
+  if (groupConversationName === "" || recipientsString === "") {
+    return res.json({ msg: "Please fill all the fields" });
   }
   const recipientsArray = JSON.parse(recipientsString);
   if (recipientsArray.length < 2) {
-    return res
-      .status(400)
-      .send("More than 2 users are required to form a group chat");
+    return res.json({
+      msg: "More than 2 users are required to form a group chat",
+    });
   }
 
   recipientsArray.push(req.user);
@@ -22,13 +22,13 @@ const createGroupConversation = async (req, res) => {
       groupAdmin: req.user,
     });
 
-    const fullGroupMessage = await GroupConversation.findOne({
-      _id: groupMessage._id,
-    })
-      .populate("recipients", "-password")
-      .populate("groupAdmin", "-password");
-
-    res.status(200).json(fullGroupMessage);
+    // const fullGroupMessage = await GroupConversation.findOne({
+    //   _id: groupMessage._id,
+    // })
+    //   .populate("recipients", "-password")
+    //   .populate("groupAdmin", "-password");
+    res.status(200).json({ msg: "Create a new group success!" });
+    // res.status(200).json(fullGroupMessage);
   } catch (error) {
     res.status(400);
     throw new Error(error.message);
@@ -43,17 +43,19 @@ const deleteGroupConversation = async (req, res) => {
     const conversation = await GroupConversation.findById(conversationId);
 
     if (!conversation) {
-      return res.json({ msg: "Conversation not found!" });
+      return res.status(200).json({ msg: "Conversation not found!" });
     }
 
     if (JSON.stringify(userId) !== JSON.stringify(conversation.groupAdmin)) {
-      return res.status(200).json({ msg: "You are not a group admin" });
+      return res
+        .status(200)
+        .json({ msg: "You are not an admin of this group!" });
     }
 
     await conversation.delete(conversationId);
 
-    res.json({
-      msg: "Delete success",
+    res.status(200).json({
+      msg: "Delete success!",
     });
   } catch (error) {
     res.status(400).json({ error });
@@ -62,14 +64,27 @@ const deleteGroupConversation = async (req, res) => {
 const renameGroupConversation = async (req, res) => {
   const newGroupName = req.body.newGroupName;
   const conversationId = req.params.id;
+  const userId = req.user._id;
 
   try {
+    const conversation = await GroupConversation.findById(conversationId);
+
+    if (!conversation) {
+      return res.status(200).json({ msg: "Conversation not found!" });
+    }
+
+    if (JSON.stringify(userId) !== JSON.stringify(conversation.groupAdmin)) {
+      return res
+        .status(200)
+        .json({ msg: "You are not an admin of this group!" });
+    }
+
     const newConversation = await GroupConversation.findOneAndUpdate(
       { _id: conversationId },
-      { conversationName: newGroupName }
+      { groupConversationName: newGroupName }
     );
 
-    res.status(200).json({ msg: "Rename success", newConversation });
+    res.status(200).json({ msg: "Rename success!", newConversation });
   } catch (error) {
     res.status(400).json({ error });
   }
@@ -79,7 +94,10 @@ const getGroupConversationById = async (req, res) => {
   try {
     const group = await GroupConversation.find({
       _id: req.params.id,
-    });
+    })
+      .populate("groupAdmin", "avatar")
+      .populate("recipients", "avatar fullname username");
+
     res.status(200).json(group);
   } catch (error) {
     res.status(400).json({ error });
@@ -91,6 +109,7 @@ const getGroupConversation = async (req, res) => {
     GroupConversation.find({
       recipients: { $elemMatch: { $eq: req.user._id } },
     })
+      .populate("groupAdmin", "avatar")
       // .populate("recipients", "-password")
       // .populate("groupAdmin", "-password")
       .sort({ updatedAt: -1 })
@@ -100,6 +119,34 @@ const getGroupConversation = async (req, res) => {
       });
   } catch (error) {
     res.status(400).json({ error });
+  }
+};
+
+const removeFromGroup = async (req, res) => {
+  const conversationId = req.params.id;
+  const { removeId } = req.body;
+  const userId = req.user._id;
+
+  try {
+    const conversation = await GroupConversation.findById(conversationId);
+
+    if (JSON.stringify(userId) !== JSON.stringify(conversation.groupAdmin)) {
+      return res
+        .status(200)
+        .json({ msg: "You are not an admin of this group!" });
+    }
+    const removed = await GroupConversation.findByIdAndUpdate(
+      conversationId,
+      {
+        $pull: { recipients: removeId },
+      },
+      {
+        new: true,
+      }
+    );
+    res.status(200).json({ msg: "Remove user form chat success!" });
+  } catch (error) {
+    res.status(400).json(error);
   }
 };
 
@@ -124,7 +171,9 @@ const createGroupMessage = async (req, res) => {
 
     const createdMessage = await GroupMessage.findOne({
       _id: message._id,
-    }).populate("groupConversation", "groupConversationName").populate("sender","avatar fullname");
+    })
+      .populate("groupConversation", "groupConversationName")
+      .populate("sender", "avatar fullname");
 
     res.json(createdMessage);
   } catch (error) {
@@ -155,6 +204,7 @@ module.exports = {
   renameGroupConversation,
   getGroupConversationById,
   getGroupConversation,
+  removeFromGroup,
   getGroupMessage,
   createGroupMessage,
 };

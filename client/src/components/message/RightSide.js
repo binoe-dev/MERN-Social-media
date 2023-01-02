@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import UserCard from "../UserCard";
+import GroupInfoModal from "./GroupInfoModal";
+import GroupNameModal from "./GroupNameModal";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
 import MsgDisplay from "./MsgDisplay";
@@ -239,12 +241,41 @@ const RightSide = () => {
     callUser({ video: true });
   };
   // ----------------------
+  const [groupInfoModal, setGroupInfoModal] = useState(false);
+  const [groupNameModal, setGroupNameModal] = useState(false);
+
   const handleDeleteGroupConversation = async () => {
-    await deleteDataAPI(
+    const res = await deleteDataAPI(
       `/group/${history.location.pathname.slice(9)}`,
       auth.token
     );
-    return history.push("/message");
+
+    if (res.data.msg.includes("success")) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { success: res.data.msg },
+      });
+      return history.push("/message");
+    } else {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: res.data.msg },
+      });
+    }
+  };
+
+  const handleInfoGroupConversation = () => {
+    setGroupInfoModal(true);
+  };
+
+  const turnOffGroupInfoModal = () => {
+    setGroupInfoModal(false);
+  };
+  const handleNameGroupConversation = () => {
+    setGroupNameModal(true);
+  };
+  const turnOffNameGroupModal = () => {
+    setGroupNameModal(false);
   };
 
   useEffect(() => {
@@ -260,12 +291,47 @@ const RightSide = () => {
         {/* ------------------- */}
         {groupMessage.groupName !== "" && (
           <div className="groupHeader-container">
-            <div className="groupName">{groupMessage.groupName}</div>
-            <div
-              className="fas fa-trash text-danger"
-              onClick={handleDeleteGroupConversation}
-            ></div>
+            <div className="groupName">
+              <img
+                alt="group-admin-avatar"
+                className="admin-img-header"
+                src={groupMessage.groupAdmin}
+              ></img>
+              {groupMessage.groupName}
+            </div>
+            <div className="group-function">
+              <div
+                className="fas fa-pen text"
+                onClick={handleNameGroupConversation}
+                style={{ marginRight: "20px" }}
+              ></div>
+              <div
+                className="fas fa-eye text"
+                onClick={handleInfoGroupConversation}
+                style={{ marginRight: "20px" }}
+              ></div>
+              <div
+                className="fas fa-trash text-danger"
+                onClick={handleDeleteGroupConversation}
+              ></div>
+            </div>
           </div>
+        )}
+
+        {groupNameModal && (
+          <GroupNameModal
+            groupName={groupMessage.groupName}
+            groupId={groupMessage.groupId}
+            onClick={turnOffNameGroupModal}
+            setGroupNameModal={setGroupNameModal}
+            groupNameModal={groupNameModal}
+          />
+        )}
+        {groupInfoModal && (
+          <GroupInfoModal
+            groupName={groupMessage.groupName}
+            onClick={turnOffGroupInfoModal}
+          />
         )}
         {/* ----------------------- */}
         {user.length !== 0 && groupMessage.groupName === "" && (

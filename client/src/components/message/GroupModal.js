@@ -5,31 +5,47 @@ import "../../styles/group_modal.css";
 import { postDataAPI, getDataAPI } from "../../utils/fetchData";
 import SearchResult from "./SearchResult";
 
-const Modal = ({ onClick }) => {
+const GroupModal = ({ onClick, setGroupModal }) => {
   const { auth } = useSelector((state) => state);
   const dispatch = useDispatch();
-
   const [groupChatName, setGroupChatName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
 
-  const handleCreateGroup = async () => {
+  const handleCreateGroup = async (e) => {
+    e.preventDefault();
     if (!groupChatName || !selectedUsers) {
       return;
     }
 
-    try {
-      const res = await postDataAPI(
-        "group",
-        {
-          groupConversationName: groupChatName,
-          recipientsString: JSON.stringify(selectedUsers.map((u) => u._id)),
-        },
-        auth.token
-      );
-    } catch (error) {
-      console.log(error);
+    const res = await postDataAPI(
+      "group",
+      {
+        groupConversationName: groupChatName,
+        recipientsString: JSON.stringify(selectedUsers.map((u) => u._id)),
+      },
+      auth.token
+    );
+
+    if (res.data.msg.includes("success")) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { success: res.data.msg },
+      });
+      const group = await getDataAPI("group", auth.token);
+
+      dispatch({
+        type: "FETCH_GROUP_CONVERSATION",
+        payload: group.data,
+      });
+      setGroupModal(false);
+      // window.location.reload();
+    } else {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: res.data.msg },
+      });
     }
   };
 
@@ -65,12 +81,13 @@ const Modal = ({ onClick }) => {
         <form className="createGroup" onSubmit={handleCreateGroup}>
           <input
             type="text"
-            placeholder="Chat Name"
+            placeholder="Enter a new group chat name"
             onChange={(e) => setGroupChatName(e.target.value)}
+            autoFocus
           />
           <input
             type="text"
-            placeholder="Users"
+            placeholder="Type to search users"
             onChange={(e) => handleSearch(e.target.value)}
           />
           <button type="submit">Create</button>
@@ -80,6 +97,11 @@ const Modal = ({ onClick }) => {
         <div className="badgeContainer">
           {selectedUsers?.map((user) => (
             <div className="groupBadge" key={user.username}>
+              <img
+                className="badgeImage"
+                alt="badge-img"
+                src={user.avatar}
+              ></img>
               <span className="badgeContent">{user.username}</span>
             </div>
           ))}
@@ -102,4 +124,4 @@ const Modal = ({ onClick }) => {
   );
 };
 
-export default Modal;
+export default GroupModal;

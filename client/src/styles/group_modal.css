@@ -31,18 +31,30 @@
 
 .createGroup input {
   font-size: 20px;
-  border-radius: 10px;
-  text-indent: 20px
+  border-radius: 5px;
+  text-indent: 20px;
+  border: 1px solid #ced4da ;
+  padding: 5px;
+}
+.createGroup input:focus{
+  border: 1px solid #ced4da;
+  outline: none;
+  box-shadow: 0 0 2px red;
 }
 
 .createGroup button {
-  font-size: 26px;
+  font-size: 20px;
+  color: white;
   width: 50%;
   margin: 0 auto 10px auto;
+  background-color: #7c8083;
+  border-radius: 5px;
+  border: none;
+  padding: 10px;
 }
 
 .createGroup button:hover {
-  background-color: #219ebc;
+  background-color: #343a40;
 }
 
 .small-avatar {
@@ -61,7 +73,7 @@
 }
 
 .searchResult {
-  border: 3px solid #aaaaaa;
+  border: 1px solid #aaaaaa;
   border-radius: 5px;
   cursor: pointer;
   margin: 5px;
@@ -75,7 +87,8 @@
   flex-direction: row;
   width: auto;
   height: 50px;
-  overflow-x: scroll
+  overflow-x: scroll;
+  border-bottom: 1px solid #aaa;
 }
 
 .badgeContainer::-webkit-scrollbar {
@@ -85,8 +98,17 @@
 
 .groupBadge {
   margin: 5px;
-  border: 3px solid #aaaaaa;
+  border: 1px solid #aaaaaa;
   border-radius: 5px;
+padding: 2px 5px 0 5px; 
+display: flex;
+align-items: center;
+}
+
+.badgeImage{
+  width:20px;
+  height: 20px;
+  border-radius: 50%;
 }
 
 .badgeContent {
@@ -97,10 +119,14 @@
   height: 80px;
   padding: 15px;
   display: flex;
-  gap: 100px;
+  gap: 10px;
   border: 1px solid #f3f3f3;
 }
 
+.admin-img{
+  outline:1px solid #000;
+  border-radius: 10px;
+}
 /* Right Side Render Group Message */
 .otherGroupChatContainer {
   margin-bottom: 35px;
@@ -130,7 +156,6 @@
   align-items: flex-end;
 }
 
-
 .yourGroupChatText {
   background-color: #0048aa;
   color: white;
@@ -153,6 +178,10 @@
 .senderContainer {
   display: flex;
 }
+/* Group Chat Image */
+.groupChatImg {
+  width: 300px;
+}
 
 /* Right Side Render Group Header */
 .groupHeader-container{
@@ -165,10 +194,130 @@ padding: 0 10px 0 20px;
 
 .groupName{
   /* font-weight: 500; */
-  color:#0048aa;
+  color:#0056b3;
 }
 
-/* Group Chat Image */
-.groupChatImg {
-  width: 200px;
+.admin-img-header{
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  outline:1px solid black;
+  border-radius: 10px;
+
+}
+
+.group-function{
+   display: flex;
+   align-items: center;
+}
+/* GroupInfoModal.js  */
+.groupInfo-header{
+text-align: center;
+font-size: 30px;
+margin-bottom: 20px;
+}
+
+.groupInfo-container{
+overflow: scroll;
+}
+
+.groupInfo-container::-webkit-scrollbar {
+  display: none;
+  /* Safari and Chrome */
+}
+.groupInfo-badge{
+border: 1px solid #666;
+border-radius: 10px;
+padding: 10px;
+margin-bottom: 10px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.groupInfo-avatar-name{
+display: flex;
+gap: 10px;
+align-items: center;
+}
+
+.groupInfo-img{
+  width: 40px;
+  border-radius: 50%;
+}
+
+.groupInfo-username{
+  font-size: 15px;
+  color:black;
+}
+
+.groupInfo-username:hover{
+  color: black;
+}
+
+.groupInfo-fullname{
+  font-size: 14px;
+  color:#757575
+}
+
+.groupInfo-admin{
+  color:#757575;
+font-style: italic;
+font-size: 12px;
+}
+
+/* GroupNameModal.js */
+.modalCard-GroupName {
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  border-radius: 10px;
+  position: fixed;
+  top: 20vh;
+  left: 35%;
+  width: 30%;
+  height: 30%;
+  z-index: 100;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.groupName-header{
+  text-align: center;
+font-size: 30px;
+margin-bottom: 20px;
+}
+
+.changeGroupName {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.changeGroupName input {
+  font-size: 20px;
+  border-radius: 5px;
+  text-indent: 20px;
+  border: 1px solid #ced4da ;
+  padding: 5px;
+}
+.changeGroupName input:focus{
+  border: 1px solid #ced4da;
+  outline: none;
+  box-shadow: 0 0 2px red;
+}
+
+.changeGroupName button {
+  font-size: 20px;
+  color: white;
+  width: 50%;
+  margin: 0 auto 10px auto;
+  background-color: #7c8083;
+  border-radius: 5px;
+  border: none;
+  padding: 10px;
+}
+
+.changeGroupName button:hover {
+  background-color: #343a40;
 }

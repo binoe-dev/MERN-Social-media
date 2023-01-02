@@ -7,6 +7,7 @@ router.delete("/group/:id", auth, groupMessageCtrl.deleteGroupConversation);
 router.put("/group/:id", auth, groupMessageCtrl.renameGroupConversation);
 router.get("/group", auth, groupMessageCtrl.getGroupConversation);
 router.get("/group/:id", auth, groupMessageCtrl.getGroupConversationById);
+router.put("/group/remove/:id", auth, groupMessageCtrl.removeFromGroup);
 
 router.get(
   "/groupmessage/:groupConversationId",

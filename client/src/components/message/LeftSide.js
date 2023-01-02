@@ -12,7 +12,7 @@ import {
 import "../../styles/group_modal.css";
 
 const LeftSide = () => {
-  const { auth, message, online } = useSelector((state) => state);
+  const { auth, message, online, groupMessage } = useSelector((state) => state);
 
   const dispatch = useDispatch();
 
@@ -93,7 +93,6 @@ const LeftSide = () => {
 
   //------------------------group
 
-  const [groupConversations, setGroupConversations] = useState([]);
   const [groupModal, setGroupModal] = useState(false);
 
   const handleGroupConversation = () => {
@@ -118,6 +117,8 @@ const LeftSide = () => {
     dispatch({
       type: "ADD_GROUP",
       payload: {
+        groupId: group.data[0]._id,
+        groupAdmin: group.data[0].groupAdmin.avatar,
         groupName: group.data[0].groupConversationName,
         groupMessage: res.data,
       },
@@ -127,12 +128,16 @@ const LeftSide = () => {
 
   const fetchGroupConversation = async () => {
     const res = await getDataAPI("group", auth.token);
-    setGroupConversations(res.data);
+
+    dispatch({
+      type: "FETCH_GROUP_CONVERSATION",
+      payload: res.data,
+    });
   };
 
   useEffect(() => {
     fetchGroupConversation();
-  }, []);
+  },[]);
 
   return (
     <>
@@ -153,20 +158,27 @@ const LeftSide = () => {
         onClick={handleGroupConversation}
         style={{ width: "100%", padding: "5px" }}
       >
-        Add new group chat
+        Add a new group chat
       </button>
 
-      {groupConversations.map((groupConversation) => (
+      {groupMessage.groupConversations.map((groupConversation) => (
         <div
           className="groupList"
           key={groupConversation._id}
           onClick={() => handleAddGroupConversation(groupConversation)}
         >
+          <img
+            alt="admin-img"
+            className="admin-img"
+            src={groupConversation.groupAdmin.avatar}
+          ></img>
           {groupConversation.groupConversationName}
         </div>
       ))}
 
-      {groupModal && <GroupModal onClick={turnOffGroupModal} />}
+      {groupModal && (
+        <GroupModal onClick={turnOffGroupModal} setGroupModal={setGroupModal} />
+      )}
       {/* ---------------------------------- */}
       <div className="message_chat_list">
         {searchUsers.length !== 0 ? (

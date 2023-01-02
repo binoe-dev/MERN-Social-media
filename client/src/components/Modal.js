@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import Avatar from "./Avatar";
 import { Link } from "react-router-dom";
 import moment from "moment";
