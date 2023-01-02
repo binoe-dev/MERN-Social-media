@@ -5,17 +5,16 @@ import moment from "moment";
 import InputComment from "./home/InputComment";
 import ModalComments from "./home/ModalComments";
 import Footer from "./home/post_card/CardFooter";
-import ModalCarousel from './home/ModalCarousel'
+import ModalCarousel from "./home/ModalCarousel";
 import "../styles/modal.css";
 
 const Modal = ({ post, images, id, onClick }) => {
-
   const [readMore, setReadMore] = useState(false);
 
   return (
     <>
       <div className="backdrop" onClick={onClick}></div>
-      <div className="modalCard">
+      <div className="modalCard-Post">
         {/* modal image */}
         <div className="modalImage h-100">
           {post.images.length > 0 && (
