@@ -111,7 +111,7 @@ const StatusModal = () => {
 
     useEffect(() => {
         if(content.length > 0){
-            setToxic(content)
+            setToxic(content.replace(/[!@#$%^&*()_=;:<>'",.?]/g,'')) 
         }
     },[content])
 
