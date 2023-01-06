@@ -111,7 +111,6 @@ const RightSide = () => {
 
       try {
         const tmp = await postDataAPI("groupmessage", groupData, auth.token);
-        console.log(tmp.data);
 
         dispatch({
           type: "ADD_GROUP_MESSAGE",
@@ -378,11 +377,20 @@ const RightSide = () => {
                   {item.media.length > 0 &&
                     item.media.map((i) => (
                       <div>
-                        <img
-                          alt="img"
-                          src={i.url}
-                          className="groupChatImg"
-                        ></img>
+                        {i.url.includes("mp4") ? (
+                          <video
+                            alt="img"
+                            src={i.url}
+                            className="groupChatImg"
+                            controls
+                          ></video>
+                        ) : (
+                          <img
+                            alt="img"
+                            src={i.url}
+                            className="groupChatImg"
+                          ></img>
+                        )}
                       </div>
                     ))}
                   <div className="groupDate">{item.createdAt}</div>
@@ -405,11 +413,20 @@ const RightSide = () => {
                   {item.media.length > 0 &&
                     item.media.map((i) => (
                       <div>
-                        <img
-                          alt="img"
-                          src={i.url}
-                          className="groupChatImg"
-                        ></img>
+                        {i.url.includes("mp4") ? (
+                          <video
+                            alt="img"
+                            src={i.url}
+                            className="groupChatImg"
+                            controls
+                          ></video>
+                        ) : (
+                          <img
+                            alt="img"
+                            src={i.url}
+                            className="groupChatImg"
+                          ></img>
+                        )}
                       </div>
                     ))}
 

@@ -148,11 +148,11 @@ const SocketServer = (socket) => {
         
         const client = users.find(user => user.id === data.recipient)
 
-        if(client){
-            if(client.call){
+        if (client) {
+            if (client.call) {
                 socket.emit('userBusy', data)
                 users = EditData(users, data.sender, null)
-            }else{
+            } else {
                 users = EditData(users, data.recipient, data.sender)
                 socket.to(`${client.socketId}`).emit('callUserToClient', data)
             }
